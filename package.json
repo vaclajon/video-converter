@@ -1,13 +1,13 @@
 {
-  "name": "nextjs",
+  "name": "mp4-converter",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "FLUENTFFMPEG_COV=false next dev",
-    "build": "FLUENTFFMPEG_COV=false next build",
-    "start": "next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "PORT=4444 next start",
     "lint": "next lint",
-    "server": "node server/server.js"
+    "server": "PORT=5555 node server/server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

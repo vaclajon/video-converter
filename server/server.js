@@ -6,7 +6,7 @@ const busboy = require("busboy");
 ffmpeg.setFfmpegPath(path);
 
 const app = express();
-
+const PORT = process.env.PORT;
 app.use(cors()); // TODO improve
 
 // TODO to separate router file
@@ -44,4 +44,6 @@ app.post("/api/file", function (req, res) {
   req.pipe(bb);
 });
 
-app.listen(process.env.PORT || 3005);
+app.listen(PORT, () => {
+  console.log("Server is running on port ", PORT);
+});

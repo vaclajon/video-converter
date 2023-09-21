@@ -36,7 +36,8 @@ export default function Home() {
     formData.append("file", file);
 
     // TODO use axios or another solution
-    const response = await fetch("http://localhost:3005/api/file", {
+    // TODO add error handling
+    const response = await fetch("http://localhost:5555/api/file", {
       method: "POST",
       body: formData,
     });
