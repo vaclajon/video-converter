@@ -9,6 +9,14 @@ const app = express();
 const PORT = process.env.PORT;
 app.use(cors()); // TODO improve
 
+const convertFile = (file, output, onError) => {
+  ffmpeg(file)
+    .toFormat("mp3")
+    .output(output, { end: true })
+    .on("error", onError)
+    .run();
+};
+
 // TODO to separate router file
 app.post("/api/file", function (req, res) {
   // TODO improve overall structure, add proper error handling
@@ -23,23 +31,23 @@ app.post("/api/file", function (req, res) {
 
   let hasFile = false;
 
-  bb.on("file", (name, file, info) => {
-    ffmpeg(file)
-      .toFormat("mp3")
-      .on("error", (err) => {
-        // TODO improve
+  bb.on("file", (_name, file) => {
+    hasFile = true;
+    convertFile(file, res, (err) => {
+      // TODO improve
 
-        res.status(500).send(err.message);
-      })
-      .on("end", () => {
-        hasFile = true;
-      })
-      .pipe(res, { end: true });
-  }).on("end", () => {
-    if (!hasFile) {
-      res.status(400).send("No file provided");
-    }
-  });
+      res.status(500).send(err.message);
+    });
+  })
+    .on("end", () => {
+      if (!hasFile) {
+        res.status(400).send("No file provided");
+      }
+    })
+    .on("error", (err) => {
+      // TODO improve
+      res.status(500).send(err.message);
+    });
 
   req.pipe(bb);
 });
